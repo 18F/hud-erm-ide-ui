@@ -1,0 +1,16 @@
+.right_container {
+  border: 3px solid;
+  padding: 30px;
+  width: 100%;
+}
+
+.right_container_status {
+  min-height: 200px;
+  border: 3px solid cadetblue;
+  margin: 10px 0 50px 0;
+  width: 100%;
+}
+
+.val-right-res {
+  font-weight: 100;
+}
