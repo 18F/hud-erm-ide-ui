@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import { Form, Col, Row, Button } from "react-bootstrap";
 
 // import axios from "axios";
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 import "./header.css";
 import { upload_file } from "../../service/service";
 
 const Header = ({
-  upload_id,
+  // upload_id,
   upload_bookmark,
   upload_csv,
   acceptPartialResults,
@@ -14,22 +15,33 @@ const Header = ({
   getVerifyDocumentPresence,
   extractPdf,
 }) => {
-  // console.log(upload_id, "header");
-  // console.log(upload_bookmark, "upload_bookmark header");
-  // console.log(upload_csv, "upload_csv header");
-  // console.log(getVerifyDocumentPresence, "getVerifyDocumentPresence header");
-  // console.log(extractPdf, "extractPdf header");
-
   const [File_name, setFile_name] = useState("");
+
   const [File, setFile] = useState();
 
-  const [set_message_status, setset_message_status] = useState("");
+  const [setproceesed_message_status, setset_message_status] = useState("");
+
+  const [upload_id, setupload_id] = useState("");
+
+  const [accept_partial_result, setaccept_partial_result] = useState(true);
+
+  const [require_full_results, setrequire_full_results] = useState(false);
+
+  const [message_status, set_message_status] = useState("");
   const select_file = (event) => {
     setFile_name(event.target.files[0].name);
     setFile(event.target.files[0]);
   };
 
-  // let message;
+  const Accept_partial_Results = (event) => {
+    setaccept_partial_result(true);
+    setrequire_full_results(false);
+  };
+
+  const Require_Full_Results = (event) => {
+    setrequire_full_results(true);
+    setaccept_partial_result(false);
+  };
   const submit_file = (event) => {
     let api_getVerifyDocumentPresence =
       getVerifyDocumentPresence &&
@@ -40,20 +52,28 @@ const Header = ({
     let data = new FormData();
     data.append("submissionFileName", File);
     data.append("externalId", upload_id);
-    data.append("generateBookmarkedPdf", upload_bookmark);
-    data.append("generateCsv", upload_csv);
+    // data.append("generateBookmarkedPdf", upload_bookmark);
+    // data.append("generateCsv", upload_csv);
 
-    data.append("acceptPartialResults", acceptPartialResults);
-    data.append("extractFullResults", upload_extractFullResults_data);
-    data.append("presenceFormNames", api_getVerifyDocumentPresence);
-    data.append("extractionFormNames", api_extractPdf);
+    data.append("acceptPartialResults", accept_partial_result);
+    data.append("extractFullResults", require_full_results);
+    // data.append("presenceFormNames", api_getVerifyDocumentPresence);
+    // data.append("extractionFormNames", api_extractPdf);
     setset_message_status("Processing...");
-    // console.log(data);
-    // debugger;
+
     upload_file(data)
-      .then((res) => res.status === 200 && setset_message_status("Processed"))
+      .then((res) => {
+        if (res.status === 200) {
+          setset_message_status("Processed");
+          set_message_status(res.data.message);
+          setupload_id("");
+        }
+      })
       .catch((err) => console.log(err));
   };
+
+  console.log(accept_partial_result, "accept_partial_result");
+  console.log(require_full_results, "require_full_results");
 
   return (
     <header>
@@ -79,19 +99,26 @@ const Header = ({
         </div>
 
         <div className="header_container">
+        
+          <input
+            placeholder="ENTER ID"
+            className="input_header_id"
+            onChange={(event) => setupload_id(event.target.value)}
+          />
           <div className="right_header_button">
             <button type="submit" size="lg" className="primary-button-header">
               SUBMIT
             </button>
             <div
               style={
-                set_message_status === "Processing..."
+                setproceesed_message_status === "Processing..."
                   ? { color: "red", marginTop: "5px" }
                   : { color: "green", marginTop: "5px" }
               }
             >
-              {set_message_status}
+              {setproceesed_message_status}
             </div>
+            <div>{message_status}</div>
           </div>
         </div>
       </form>

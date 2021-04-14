@@ -28,17 +28,17 @@ const RightActionContainer = () => {
     setdownload_id(event.target.value);
   };
 
-  const get_download = (event) => {
-    event.preventDefault();
+  // const get_download = (event) => {
+  //   event.preventDefault();
 
-    get_download_file(download_id)
-      .then((res) => {
-        // debugger;
-        setdownload_id("");
-        window.open(res.config.url);
-      })
-      .catch((err) => console.log(err));
-  };
+  //   get_download_file(download_id)
+  //     .then((res) => {
+  //       // debugger;
+  //       setdownload_id("");
+  //       window.open(res.config.url);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
   return (
     <section className="right_container">
       <div>
@@ -106,7 +106,7 @@ const RightActionContainer = () => {
       </div>
 
       <div>
-        <Form onSubmit={get_download}>
+        {/* <Form onSubmit={get_download}>
           <Form.Group as={Row} controlId="formHorizontalEmail">
             <Col>
               <Form.Control
@@ -115,20 +115,12 @@ const RightActionContainer = () => {
                 onChange={get_status_download_id}
               />
             </Col>
-            {/* <Form.Label> */}
-            <button
-              column
-              //   sm={3}
-              type="submit"
-              // variant="outline-success"
-              //   size="lg"
-              className="primary-button-header"
-            >
+
+            <button column type="submit" className="primary-button-header">
               GET RESULTS
             </button>
-            {/* </Form.Label> */}
           </Form.Group>
-        </Form>
+        </Form> */}
       </div>
       {/* </div> */}
     </section>
