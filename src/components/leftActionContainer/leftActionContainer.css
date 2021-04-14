@@ -3,3 +3,8 @@
   align-items: center;
   justify-content: center;
 }
+
+#input_id_left_comp {
+  width: 30%  !important;
+  margin-right: 70px;
+}

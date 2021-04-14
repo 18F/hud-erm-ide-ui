@@ -3,7 +3,7 @@ import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 
 import options from "../../data";
 
-const MultiSelectAll = ({ verify_doc }) => {
+const MultiSelectAll = ({ verify_doc_left }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   // useEffect(() => {
@@ -36,7 +36,7 @@ const MultiSelectAll = ({ verify_doc }) => {
     }
   }
 
-  verify_doc(selectedOptions);
+  verify_doc_left(selectedOptions);
 
   return (
     <ReactMultiSelectCheckboxes

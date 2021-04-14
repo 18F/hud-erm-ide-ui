@@ -33,3 +33,42 @@
   align-items: center;
   justify-content: center;
 }
+
+.input_header_id {
+  margin-right: 15px;
+  border: 3px solid !important;
+  display: block;
+  /* width: 100%; */
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/*require_full_results css*/
+.require_full_results {
+  width: 80%;
+  font-size: 15px;
+}
+
+/*accept_partial_result css*/
+.accept_partial_result {
+  width: 80%;
+  font-size: 15px;
+}
+
+/*form_group_accept css*/
+.form_group_accept {
+  margin-right: 10px !important;
+}
+
+/*form_group_accept*/
+.form_group_require {
+  margin-right: 10px !important;
+}

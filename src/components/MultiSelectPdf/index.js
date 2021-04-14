@@ -3,12 +3,8 @@ import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 
 import options from "../../data";
 
-const MultiSelectAllPdf = ({extractPdf_val}) => {
+const MultiSelectAllPdf = ({ extractPdf_val_left }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
-
-  // useEffect(() => {
-  //   setSelectedOptions([{ label: "All", value: "*" }, ...options]);
-  // }, []);
 
   function getDropdownButtonLabel({ placeholderButtonLabel, value }) {
     if (value && value.some((o) => o.value === "*")) {
@@ -34,12 +30,11 @@ const MultiSelectAllPdf = ({extractPdf_val}) => {
       this.setState(value);
     }
   }
-  //   console.log(selectedOptions, "pdf");
-  extractPdf_val(selectedOptions);
+  // extractPdf_val(selectedOptions);
+  extractPdf_val_left(selectedOptions);
   return (
     <ReactMultiSelectCheckboxes
       options={[{ label: "All", value: "*" }, ...options]}
-      //   placeholderButtonLabel="Colors"
       getDropdownButtonLabel={getDropdownButtonLabel}
       value={selectedOptions}
       onChange={onChange}

@@ -5,75 +5,37 @@ import MultiSelectAll from "../MultiSelect";
 import options from "../../data";
 import "./leftActionContainer.css";
 import MultiSelectAllPdf from "../MultiSelectPdf";
+import { get_download_file } from "../../service/service";
 
-const LeftActionContainer = ({
-  get_upload_id,
-  getBookmark,
-  csv,
-  acceptPartialResults,
-  extractFullResults,
-  get_radio,
-  verify_doc,
-  extractPdf_val,
-}) => {
-  const [bookmark, setbookmark] = useState(true);
-  const [csv_data, setcsv_data] = useState(true);
-  const [acceptPartialResults_data, setacceptPartialResults_data] = useState(
-    true
-  );
-  const [extractFullResults_data, setextractFullResults_data] = useState(true);
+const LeftActionContainer = ({ csv }) => {
+  const [bookmark, setbookmark] = useState(false);
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [selectedOptions_pdf, setSelectedOptions_pdf] = useState([]);
+  const [csv_data, setcsv_data] = useState(false);
 
-  useEffect(() => {
-    setSelectedOptions();
-  }, []);
+  const [extractFullResults_data, setextractFullResults_data] = useState(false);
 
-  useEffect(() => {
-    setSelectedOptions_pdf();
-  }, []);
+  const [download_id, setdownload_id] = useState("");
 
-  // function onChange_pdf(value, event) {
-  //   if (event.action === "select-option" && event.option.value === "*") {
-  //     this.setState(this.options);
-  //   } else if (
-  //     event.action === "deselect-option" &&
-  //     event.option.value === "*"
-  //   ) {
-  //     this.setState([]);
-  //   } else if (event.action === "deselect-option") {
-  //     this.setState(value.filter((o) => o.value !== "*"));
-  //   } else if (value.length === this.options.length - 1) {
-  //     this.setState(this.options);
-  //   } else {
-  //     this.setState(value);
-  //   }
-  //   console.log(selectedOptions_pdf, "selectedOptions_pdf");
+  const [FileObj, setFileObj] = useState();
 
-  // }
+  // const [selectedOptions, setSelectedOptions] = useState([]);
 
-  function onChange(value, event) {
-    if (event.action === "select-option" && event.option.value === "*") {
-      this.setState(this.options);
-    } else if (
-      event.action === "deselect-option" &&
-      event.option.value === "*"
-    ) {
-      this.setState([]);
-    } else if (event.action === "deselect-option") {
-      this.setState(value.filter((o) => o.value !== "*"));
-    } else if (value.length === this.options.length - 1) {
-      this.setState(this.options);
-    } else {
-      this.setState(value);
-    }
-    console.log(selectedOptions, "selectedOptions");
-  }
-  const change_bookmark = () => {
+  // const [selectedOptions_pdf, setSelectedOptions_pdf] = useState([]);
+
+  const [verify_doc, setverify_doc] = useState([]);
+
+  const [extractPdf_val, setextractPdf_val] = useState([]);
+
+  // useEffect(() => {
+  //   setSelectedOptions();
+  // }, []);
+
+  // useEffect(() => {
+  //   setSelectedOptions_pdf();
+  // }, []);
+
+  const change_bookmark = (e) => {
     setbookmark(!bookmark);
-    // console.log(bookmark, 45);
-    getBookmark(bookmark);
   };
 
   const change_csv = () => {
@@ -81,62 +43,69 @@ const LeftActionContainer = ({
     csv(csv_data);
   };
 
-  // const acceptPartialResults_val = () => {
-  // setacceptPartialResults_data(true);
-  // setextractFullResults_data(!acceptPartialResults_data);
-  // console.log(acceptPartialResults_data);
-  // console.log(extractFullResults_data);
-  // debugger;
-  // get_radio(radio_data);
-  // };
-
-  const extractFullResults_val = () => {
-    // console.log(extractFullResults_data, 41);
-
-    setextractFullResults_data(true);
-    setacceptPartialResults_data(false);
-
-    // console.log(extractFullResults_data, "extractFullResults_data");
-    // console.log(acceptPartialResults_data, "acceptPartialResults_data");
-
-    extractFullResults(extractFullResults_data, acceptPartialResults_data);
-    // debugger;
-    // get_radio(radio_data);
+  const extractFullResultsHandler = () => {
+    setextractFullResults_data(!extractFullResults_data);
   };
 
-  const acceptPartialResults_data_val_toggle = () => {
-    //  console.log(extractFullResults_data, 41);
-
-    setextractFullResults_data(true);
-    setacceptPartialResults_data(false);
-
-    // console.log(extractFullResults_data, "extractFullResults_data");
-    // console.log(acceptPartialResults_data, "acceptPartialResults_data");
-    acceptPartialResults(acceptPartialResults_data, extractFullResults_data);
-    // debugger;
-    // get_radio(radio_data);
+  const verify_doc_left = (data) => {
+    console.log(data, "verify_doc_left");
+    setverify_doc(data);
   };
+  const extractPdf_val_left = (data) => {
+    console.log(data, "extractPdf_val_left");
+    setextractPdf_val(data);
+  };
+  //download file
+  const get_download = (event) => {
+    event.preventDefault();
+    let presenceFormNames = verify_doc && verify_doc.map((item) => item.value);
+    let extractionFormNames =
+      extractPdf_val && extractPdf_val.map((item) => item.value);
 
-  // let options = [
-  //   { label: "HUD 92800-5B", value: "HUD 92800-5B" },
-  //   { label: "HUD-92051", value: "HUD-92051" },
-  //   { label: "HUD-92300", value: "HUD-92300" },
-  // ];
+    let data = {
+      externalId: download_id,
+      generateBookmarkedPdf: bookmark,
+      generateCsv: csv_data,
+      extractFullResults: extractFullResults_data,
+      presenceFormNames,
+      extractionFormNames,
+    };
+    get_download_file(data)
+      .then((res) => {
+        console.log(res);
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        console.log(url);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${download_id}.zip`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        setFileObj(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Form>
       <Form.Group as={Row} controlId="formHorizontalEmail">
-        <Form.Label column sm={4}>
-          External ID
-        </Form.Label>
-        <Col sm={4} className="left_container_col">
+        <Col className="d-flex">
           <Form.Control
-            type="email"
+            type="text"
             placeholder="ENTER ID"
-            onChange={get_upload_id}
+            id="input_id_left_comp"
+            onChange={(event) => setdownload_id(event.target.value)}
           />
+          <button
+            column
+            type="submit"
+            className="primary-button-header"
+            onClick={get_download}
+          >
+            GET RESULTS
+          </button>
         </Col>
       </Form.Group>
+      {/* </Form> */}
 
       <Form.Group as={Row} controlId="formHorizontalCheck">
         <Form.Label column sm={4}>
@@ -156,70 +125,24 @@ const LeftActionContainer = ({
         </Col>
       </Form.Group>
 
-      <fieldset>
-        <Form.Group as={Row}>
-          <Form.Label as="legend" column sm={4}>
-            Accept Partial Results
-          </Form.Label>
-          <Col
-            sm={4}
-            className="left_container_col"
-            // onChange={acceptPartialResults}
-          >
-            <Form.Check
-              type="radio"
-              //   label="first radio"
-              defaultChecked={true}
-              value={acceptPartialResults_data}
-              name="formHorizontalRadios"
-              id="formHorizontalRadios1"
-              // onChange={acceptPartialResults_val}
-              onChange={acceptPartialResults_data_val_toggle}
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row}>
-          <Form.Label as="legend" column sm={4}>
-            Require Full Results
-          </Form.Label>
-          <Col sm={4} className="left_container_col">
-            <Form.Check
-              type="radio"
-              //   label="first radio"
-              name="formHorizontalRadios"
-              id="formHorizontalRadios1"
-              value={extractFullResults_data}
-              onChange={extractFullResults_val}
-
-              // onchange={change_radio_button}
-            />
-          </Col>
-        </Form.Group>
-      </fieldset>
-
       <Form.Group as={Row} controlId="formHorizontalCheck">
         <Form.Label column sm={4}>
           Verify Document Presence
         </Form.Label>
         <Col sm={4} className="left_container_col">
-          {/* <ReactMultiSelectCheckboxes
-            options={[{ label: "All", value: "*" }, ...options]}
-            //   placeholderButtonLabel="Colors"
-            //   getDropdownButtonLabel={getDropdownButtonLabel}
-            value={selectedOptions}
-            onChange={onChange}
-            setState={setSelectedOptions}
-          /> */}
-          <MultiSelectAll verify_doc={verify_doc} />
+          <MultiSelectAll verify_doc_left={verify_doc_left} />
         </Col>
       </Form.Group>
 
       <Form.Group as={Row} controlId="formHorizontalCheck">
         <Form.Label column sm={4}>
-          Return JSON File
+          Extract Full Results
         </Form.Label>
         <Col sm={4} className="left_container_col">
-          <Form.Check />
+          <Form.Check
+            value={extractFullResults_data}
+            onChange={extractFullResultsHandler}
+          />
         </Col>
       </Form.Group>
 
@@ -228,15 +151,7 @@ const LeftActionContainer = ({
           Extract Pdf
         </Form.Label>
         <Col sm={4} className="left_container_col">
-          {/* <ReactMultiSelectCheckboxes
-            options={[{ label: "All", value: "*" }, ...options]}
-            //   placeholderButtonLabel="Colors"
-            //   getDropdownButtonLabel={getDropdownButtonLabel}
-            value={selectedOptions_pdf}
-            onChange={onChange_pdf}
-            setState={setSelectedOptions_pdf}
-          /> */}
-          <MultiSelectAllPdf extractPdf_val={extractPdf_val} />
+          <MultiSelectAllPdf extractPdf_val_left={extractPdf_val_left} />
         </Col>
       </Form.Group>
     </Form>
