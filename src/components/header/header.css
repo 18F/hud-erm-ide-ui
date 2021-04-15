@@ -51,14 +51,14 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-/*require_full_results css*/
-.require_full_results {
+/*accept_partial_result css*/
+.accept_partial_result {
   width: 80%;
   font-size: 15px;
 }
 
-/*accept_partial_result css*/
-.accept_partial_result {
+/*require_full_results css*/
+.require_full_results {
   width: 80%;
   font-size: 15px;
 }
