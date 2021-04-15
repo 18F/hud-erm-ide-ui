@@ -59,21 +59,13 @@ const Header = ({
     data.append("extractFullResults", require_full_results);
     // data.append("presenceFormNames", api_getVerifyDocumentPresence);
     // data.append("extractionFormNames", api_extractPdf);
-    setset_message_status("Processing...");
+  
 
     upload_file(data)
-      .then((res) => {
-        if (res.status === 200) {
-          setset_message_status("Processed");
-          set_message_status(res.data.message);
-          setupload_id("");
-        }
-      })
-      .catch((err) => console.log(err));
+   
   };
 
-  console.log(accept_partial_result, "accept_partial_result");
-  console.log(require_full_results, "require_full_results");
+
 
   return (
     <header>
@@ -99,7 +91,48 @@ const Header = ({
         </div>
 
         <div className="header_container">
-        
+         <div>
+            <fieldset>
+              <Form.Group as={Row} className="form_group_accept">
+                <Form.Label as="legend" className="accept_partial_result">
+                  Accept Partial Results 
+                </Form.Label>
+                <div
+                  className="left_container_col"
+                  // onChange={acceptPartialResults}
+                >
+                  <Form.Check
+                    type="radio"
+                    //   label="first radio"
+                    defaultChecked={true}
+                    value={accept_partial_result}
+                    name="formHorizontalRadios"
+                    id="formHorizontalRadios1"
+                    onChange={Accept_partial_Results}
+                  />
+                </div>
+              </Form.Group>
+              <Form.Group as={Row} className="form_group_require">
+                <Form.Label as="legend" className="require_full_results">
+                  Require Full Results
+                </Form.Label>
+                <div className="left_container_col">
+                  <Form.Check
+                    type="radio"
+                    //   label="first radio"
+                    name="formHorizontalRadios"
+                    id="formHorizontalRadios1"
+                    value={require_full_results}
+                    // onChange={extractFullResults_val}
+                    onChange={Require_Full_Results}
+
+                    // onchange={change_radio_button}
+                  />
+                </div>
+              </Form.Group>
+            </fieldset>
+         </div> 
+
           <input
             placeholder="ENTER ID"
             className="input_header_id"
