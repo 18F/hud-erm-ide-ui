@@ -59,13 +59,21 @@ const Header = ({
     data.append("extractFullResults", require_full_results);
     // data.append("presenceFormNames", api_getVerifyDocumentPresence);
     // data.append("extractionFormNames", api_extractPdf);
-  
+    setset_message_status("Processing...");
 
     upload_file(data)
-   
+      .then((res) => {
+        if (res.status === 200) {
+          setset_message_status("Processed");
+          set_message_status(res.data.message);
+          setupload_id("");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
-
+  console.log(accept_partial_result, "accept_partial_result");
+  console.log(require_full_results, "require_full_results");
 
   return (
     <header>
